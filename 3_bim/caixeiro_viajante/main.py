@@ -3,12 +3,17 @@ from aleatorio import aleatorio
 from hibrido import hibrido
 from guloso import guloso
 
-def write(execucao, filename, rows):
+def writeResult(cidades, execucao, filename, resultRow):
     filepath = 'results/{0}-{1}.txt'.format(execucao, filename)
     print('writing - ', filepath)
 
     with open(filepath, 'w', newline='', encoding='utf-8') as f:
-        f.write(str(rows))
+        results = []
+        for i in resultRow[0]: 
+            results.append(cidades[i])
+
+        row = (results, resultRow[1])
+        f.write(str(row))
 
 def getData(rows):
     header = rows[0]
@@ -54,15 +59,15 @@ def main():
     for execucao in range(execucoes):
         res = aleatorio(matriz_distancias, cidadesindex)
         print("aleatorio - res:", res)
-        write(execucao, 'result-aleatorio', res)
+        writeResult(cidades, execucao, 'result-aleatorio', res)
 
         res = guloso(matriz_distancias, cidadesindex)
         print("guloso - res:", res)
-        write(execucao, 'result-guloso', res)
+        writeResult(cidades, execucao, 'result-guloso', res)
 
         res = hibrido(matriz_distancias, cidadesindex)
         print("hibrido - res:", res)
-        write(execucao, 'result-hibrido', res)
+        writeResult(cidades, execucao, 'result-hibrido', res)
 
 
 if __name__ == "__main__":

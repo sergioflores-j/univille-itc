@@ -1,1 +1,1 @@
-([23, 20, 17, 11, 25, 10, 2, 18, 12, 3, 1, 5, 15, 21, 26, 24, 13, 6, 9, 14, 19, 7, 22, 0, 4, 16, 8], 58989)
+(['Brasília', 'Macapá', 'Belo Horizonte', 'Porto Alegre', 'Rio de Janeiro', 'Florianópolis', 'Campo Grande', 'Teresina', 'Fortaleza', 'Goiânia', 'Cuiabá', 'Salvador', 'Boa Vista', 'Maceió', 'João Pessoa', 'Natal', 'Porto Velho', 'São Paulo', 'Aracaju', 'Vitória', 'Curitiba', 'Palmas', 'São Luis', 'Manaus', 'Belém', 'Recife', 'Rio Branco'], 55533)
