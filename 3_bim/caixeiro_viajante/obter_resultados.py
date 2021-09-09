@@ -37,17 +37,27 @@ def obter_resultados():
     data = getResults()
 
     rows = [algos]
+    timerows = [algos]
     for i in range(execucoes):
         rows.append([None] * len(algos))
+        timerows.append([None] * len(algos))
 
     for algoIndex in range(len(algos)):
         for resultIndex in range(len(data[algoIndex])):
-            
             solucao, distancia = data[algoIndex][resultIndex]
 
             rows[resultIndex + 1][algoIndex] = distancia
 
+            timeFilepath ='results/{0}-result-{1}-time.txt'.format(resultIndex, algos[algoIndex])
+            print('timeFilepath', timeFilepath)
+
+            with open(timeFilepath, newline='', encoding='utf-8') as resFile:
+                for row in resFile:
+                    if row:
+                        timerows[resultIndex + 1][algoIndex] = row
+
     write('final-result', rows)
+    write('final-time-result', timerows)
     print(rows)
 
 
