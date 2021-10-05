@@ -1,7 +1,7 @@
 # coding=utf-8
 
-import matplotlib.pyplot as plt
-import numpy as np
+# import matplotlib.pyplot as plt
+# import numpy as np
 import time
 from datetime import timedelta
 from utils import funcao_objetivo,start
@@ -137,23 +137,23 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 
 	return fitness[melhor_final], melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao
 
-def gerarRelatorio(melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao):
-	fig = plt.figure()
-	ax = plt.axes()
+# def gerarRelatorio(melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao):
+# 	fig = plt.figure()
+# 	ax = plt.axes()
 
-	plt.title("Convergência da população")
-	plt.xlabel("Geração")
-	plt.ylabel("Fitness")
+# 	plt.title("Convergência da população")
+# 	plt.xlabel("Geração")
+# 	plt.ylabel("Fitness")
 
-	ax.plot(melhor_fitness_da_geracao, label="Melhor")
-	ax.plot(media_fitness_da_geracao, label="Média")
-	ax.plot(pior_fitness_da_geracao, label="Pior")
-	ax.grid(False)
-	plt.legend()
+# 	ax.plot(melhor_fitness_da_geracao, label="Melhor")
+# 	ax.plot(media_fitness_da_geracao, label="Média")
+# 	ax.plot(pior_fitness_da_geracao, label="Pior")
+# 	ax.grid(False)
+# 	plt.legend()
 
 def gerarRelatorioFinal(resultados):
 	# TODO
-	print("result")
+	print("result", resultados)
 
 def main():
 	# Test cases (comentar para utilizar os inputs)
@@ -173,6 +173,7 @@ def main():
 	for execucao in range(execucoes):
 		# PRIMEIRO INPUT
 		lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila = start(1)
+		print(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila)
 		res = algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade)
 		resultados_1.append(res)
 		# TODO gerar relatorio

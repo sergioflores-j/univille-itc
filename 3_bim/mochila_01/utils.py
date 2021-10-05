@@ -21,15 +21,17 @@ def getData(rows):
     row = rows[i]
 
     [c,w,p,s] = row
-    tamanho_da_mochila = c
+    if c != "":
+      tamanho_da_mochila = int(c)
 
-    peso_dos_objetos.append(w)
-    lucro_dos_objetos.append(p)
+    peso_dos_objetos.append(int(w))
+    lucro_dos_objetos.append(int(p))
 
   return lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila
 
 def start(i):
-  filepath = 'input{0}.csv'.format(i)
+  filepath = 'input{0}.csv'.format(str(i))
+  print('starting - filename:', filepath)
 
   with open(filepath, newline='', encoding='utf-8') as inputFile:
     reader = csv.reader(inputFile)
