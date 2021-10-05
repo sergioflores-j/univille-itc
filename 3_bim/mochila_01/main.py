@@ -1,8 +1,10 @@
 # coding=utf-8
 
+import matplotlib.pyplot as plt
+import numpy as np
 import time
 from datetime import timedelta
-from utils import funcao_objetivo
+from utils import funcao_objetivo,start
 import random
 
 def gerar_solucao_inicial(tamanho_da_solucao, tamanho_da_populacao, populacao):
@@ -133,38 +135,58 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 	print(populacao[melhor_final])
 	print("Fitness =", fitness[melhor_final])
 
+	return fitness[melhor_final], melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao
+
+def gerarRelatorio(melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao):
+	fig = plt.figure()
+	ax = plt.axes()
+
+	plt.title("Convergência da população")
+	plt.xlabel("Geração")
+	plt.ylabel("Fitness")
+
+	ax.plot(melhor_fitness_da_geracao, label="Melhor")
+	ax.plot(media_fitness_da_geracao, label="Média")
+	ax.plot(pior_fitness_da_geracao, label="Pior")
+	ax.grid(False)
+	plt.legend()
+
+def gerarRelatorioFinal(resultados):
+	# TODO
+	print("result")
 
 def main():
-	# Test cases
+	# Test cases (comentar para utilizar os inputs)
 	execucoes = 1
 	lucro_dos_objetos = [5, 3, 2, 1, 4, 6, 3, 5, 1, 1, 2, 3, 5, 6, 8]
 	peso_dos_objetos = [6, 3, 5, 1, 1, 2, 3, 5, 6, 8, 4, 3, 3, 2, 1]
 	tamanho_da_mochila = 7
+	
+	# Constantes
 	penalidade = 25
-
 	# execucoes = 30
+
+	# Variaveis
+	resultados_1 = []
+	resultados_2 = []
 
 	for execucao in range(execucoes):
 		# PRIMEIRO INPUT
-
-		# lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade = start(1)
-		# start_time = time.time()
+		lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila = start(1)
 		res = algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade)
-		print("algoritmoPopulacional - res:", res)
-		# writeResult(cidades, execucao, 'result-algoritmoPopulacional', res)
-		# writeTimeResult(
-		#     execucao, 'result-algoritmoPopulacional-time', time.time() - start_time)
+		resultados_1.append(res)
+		# TODO gerar relatorio
 
 		# SEGUNDO INPUT
 
-		# lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade = start(2)
-		# start_time = time.time()
+		# lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila = start(2)
 		# res = algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade)
-		# print("algoritmoPopulacional - res:", res)
-		# writeResult(cidades, execucao, 'result-algoritmoPopulacional', res)
-		# writeTimeResult(
-		#     execucao, 'result-algoritmoPopulacional-time', time.time() - start_time)
+		# resultados_2.append(res)
+		# TODO gerar relatorio
 
+	# TODO gerar relatorio final...
+	gerarRelatorioFinal(resultados_1)
+	gerarRelatorioFinal(resultados_2)
 
 if __name__ == "__main__":
 	print('starting')

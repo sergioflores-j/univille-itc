@@ -12,28 +12,6 @@ def funcao_objetivo(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, pen
 
   return fitness
 
-# TODO
-def writeResult(cidades, execucao, filename, resultRow):
-  filepath = 'results/{0}-{1}.txt'.format(execucao, filename)
-  print('writing - ', filepath)
-
-  with open(filepath, 'w', newline='', encoding='utf-8') as f:
-    results = []
-    for i in resultRow[0]:
-      results.append(cidades[i])
-
-    row = (results, resultRow[1])
-    f.write(str(row))
-
-# TODO
-def writeTimeResult(execucao, filename, data):
-  filepath = 'results/{0}-{1}.txt'.format(execucao, filename)
-  print('writing - ', filepath)
-
-  with open(filepath, 'w', newline='', encoding='utf-8') as f:
-    f.write(str(data))
-
-
 def getData(rows):
   lucro_dos_objetos = []
   peso_dos_objetos = []
