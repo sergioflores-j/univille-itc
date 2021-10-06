@@ -2,6 +2,7 @@
 
 # import matplotlib.pyplot as plt
 # import numpy as np
+import csv
 import time
 from datetime import timedelta
 from utils import funcao_objetivo,start
@@ -110,8 +111,8 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 	for i in range(tamanho_da_populacao):
 		populacao.append([0] * tamanho_da_solucao)
 		proxima_populacao.append([0] * tamanho_da_solucao)
-
 	proxima_populacao.append([0] * tamanho_da_solucao)
+
 	melhor_fitness_da_geracao = []
 	media_fitness_da_geracao = []
 	pior_fitness_da_geracao = []
@@ -130,11 +131,13 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 		populacao, fitness = gerar_proxima_populacao(proxima_populacao, fitness_proxima_populacao, tamanho_da_populacao)
 		relatorio_de_convergencia_da_geracao(fitness, melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao, tamanho_da_populacao)
 		contador = contador + 1
+	
 	print("Melhor individuo")
 	melhor_final = identificar_melhor_solucao(fitness, tamanho_da_populacao)
 	print(populacao[melhor_final])
 	print("Fitness =", fitness[melhor_final])
 
+	# O valor de fitness ou aptidão define o qual bem a solução resolve o problema. 
 	return fitness[melhor_final], melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao
 
 # def gerarRelatorio(melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao):
@@ -151,20 +154,36 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 # 	ax.grid(False)
 # 	plt.legend()
 
-def gerarRelatorioFinal(resultados):
-	# TODO
+def gerarRelatorioFinal(outputs):
+	filepath = 'results/final.csv'
+	print('writing - ', filepath)
+	rows = [["entrada", "execucao", "solucao"]]
+
+	with open(filepath, 'w', newline='', encoding='utf-8') as f:
+		for i in range(len(outputs)):
+			resultados = outputs[i]
+
+			for j in range(len(resultados)):
+				result = resultados[j]
+				solucao, melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao = result
+				
+				rows.append((i+1, j+1, solucao))
+
+		writer = csv.writer(f)
+		writer.writerows(rows)
+
 	print("result", resultados)
 
 def main():
 	# Test cases (comentar para utilizar os inputs)
-	execucoes = 1
-	lucro_dos_objetos = [5, 3, 2, 1, 4, 6, 3, 5, 1, 1, 2, 3, 5, 6, 8]
-	peso_dos_objetos = [6, 3, 5, 1, 1, 2, 3, 5, 6, 8, 4, 3, 3, 2, 1]
-	tamanho_da_mochila = 7
+	# execucoes = 1
+	# lucro_dos_objetos = [5, 3, 2, 1, 4, 6, 3, 5, 1, 1, 2, 3, 5, 6, 8]
+	# peso_dos_objetos = [6, 3, 5, 1, 1, 2, 3, 5, 6, 8, 4, 3, 3, 2, 1]
+	# tamanho_da_mochila = 7
 	
 	# Constantes
 	penalidade = 25
-	# execucoes = 30
+	execucoes = 30
 
 	# Variaveis
 	resultados_1 = []
@@ -176,18 +195,13 @@ def main():
 		print(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila)
 		res = algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade)
 		resultados_1.append(res)
-		# TODO gerar relatorio
 
 		# SEGUNDO INPUT
+		lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila = start(2)
+		res = algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade)
+		resultados_2.append(res)
 
-		# lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila = start(2)
-		# res = algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade)
-		# resultados_2.append(res)
-		# TODO gerar relatorio
-
-	# TODO gerar relatorio final...
-	gerarRelatorioFinal(resultados_1)
-	gerarRelatorioFinal(resultados_2)
+	gerarRelatorioFinal([resultados_1, resultados_2])
 
 if __name__ == "__main__":
 	print('starting')
