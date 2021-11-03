@@ -22,12 +22,22 @@ def avaliar_populacao(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, p
 
 
 def identificar_melhor_solucao(fitness, tamanho_da_populacao):
-	indice_da_melhor_solucao = 0
-	for i in range(tamanho_da_populacao):
-		if fitness[indice_da_melhor_solucao] < fitness[i]:
-			indice_da_melhor_solucao = i
-	return indice_da_melhor_solucao
+	tamanho_do_torneio = 3
 
+	indice_melhor_solucao = random.randint(0, tamanho_da_populacao - 1)
+
+	for i in range(tamanho_do_torneio - 1):
+		indice_da_solucao_candidata = indice_melhor_solucao
+		
+		while ( indice_da_solucao_candidata == indice_melhor_solucao ):
+			indice_da_solucao_candidata = random.randint(0, tamanho_da_populacao - 1)
+
+		if fitness[indice_da_solucao_candidata] > fitness[indice_melhor_solucao]:
+			indice_melhor_solucao = indice_da_solucao_candidata
+
+	print("Solucao que venceu o torneio indice ", indice_melhor_solucao, "com o fitness ", fitness[indice_melhor_solucao])
+
+	return indice_melhor_solucao
 
 def elitismo(tamanho_da_populacao, populacao, fitness, fitness_proxima_populacao, proxima_populacao):
 	indice_da_melhor_solucao = identificar_melhor_solucao(fitness, tamanho_da_populacao)
@@ -36,17 +46,36 @@ def elitismo(tamanho_da_populacao, populacao, fitness, fitness_proxima_populacao
 
 	return indice_da_melhor_solucao
 
+def cruzamento(tamanho_da_solucao, populacao, fitness, proxima_populacao, tamanho_da_populacao):
+	# pegar da população inicial 2 individuos com maior fitness
+	# cruzar esses individuos
+	# colocar a proxima população os dois novos individuos gerados
+	fitness_populacao = fitness.copy()
+	indice_solucao_a = identificar_melhor_solucao(fitness_populacao, tamanho_da_populacao)
 
-def mutacao(tamanho_da_solucao, percentual_de_realizar_mutacao, populacao, proxima_populacao, indice):
+	fitness_populacao[indice_solucao_a] = 0
+	indice_solucao_b = identificar_melhor_solucao(fitness_populacao, tamanho_da_populacao)
+
+	solucao_a = populacao[indice_solucao_a]
+	solucao_b = populacao[indice_solucao_b]
+		
+	ponto_de_corte = random.randint(0, tamanho_da_solucao - 1)
+	print('Ponto de Corte:', ponto_de_corte)
+
+	nova_solucao_a = []
+	nova_solucao_b = []
+
 	for i in range(tamanho_da_solucao):
-		if random.randint(0, 100) <= percentual_de_realizar_mutacao:
-			if populacao[indice][i] == 0:
-				proxima_populacao[indice][i] = 1
-			else:
-				proxima_populacao[indice][i] = 0
+		if i <= ponto_de_corte:
+			nova_solucao_a.append(solucao_a[i])
+			nova_solucao_b.append(solucao_b[i])
 		else:
-			proxima_populacao[indice][i] = populacao[indice][i]
+			nova_solucao_b.append(solucao_a[i])
+			nova_solucao_a.append(solucao_b[i])
 
+	proxima_populacao = populacao.copy()
+	proxima_populacao[indice_solucao_a] = nova_solucao_a
+	proxima_populacao[indice_solucao_b] = nova_solucao_b
 
 def identificar_pior_solucao_da_proxima_populacao(tamanho_da_populacao, fitness_proxima_populacao):
 	indice_da_pior_solucao = 0
@@ -98,7 +127,6 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 	tamanho_da_populacao = 4
 	quantidade_total_de_avaliacoes = 20
 	quantidade_atual_de_avaliacoes = 0
-	percentual_de_realizar_mutacao = 3  # 3% de chance de realizar a mutação
 	populacao = []
 	proxima_populacao = []
 	fitness = [0] * tamanho_da_populacao
@@ -119,15 +147,20 @@ def algoritmoPopulacional(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochil
 	avaliar_populacao(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade, fitness, populacao, tamanho_da_populacao)
 	quantidade_atual_de_avaliacoes = tamanho_da_populacao
 	relatorio_de_convergencia_da_geracao(fitness, melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao, tamanho_da_populacao)
+
 	contador = 0
 	while not criterio_de_parada_atingido(quantidade_atual_de_avaliacoes, quantidade_total_de_avaliacoes):
 		indice_da_melhor_solucao = elitismo(tamanho_da_populacao, populacao, fitness, fitness_proxima_populacao, proxima_populacao)
+
 		for i in range(tamanho_da_populacao):
-			mutacao(tamanho_da_solucao, percentual_de_realizar_mutacao, populacao, proxima_populacao, i)
+			cruzamento(tamanho_da_solucao, populacao, fitness, proxima_populacao, tamanho_da_populacao)
 			fitness_proxima_populacao[i] = funcao_objetivo(lucro_dos_objetos, peso_dos_objetos, tamanho_da_mochila, penalidade, proxima_populacao[i])
+
 			quantidade_atual_de_avaliacoes = quantidade_atual_de_avaliacoes + 1
+
 		populacao, fitness = gerar_proxima_populacao(proxima_populacao, fitness_proxima_populacao, tamanho_da_populacao)
 		relatorio_de_convergencia_da_geracao(fitness, melhor_fitness_da_geracao, media_fitness_da_geracao, pior_fitness_da_geracao, tamanho_da_populacao)
+
 		contador = contador + 1
 	
 	print("Melhor individuo")
